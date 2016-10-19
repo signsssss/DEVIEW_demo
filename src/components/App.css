@@ -1,0 +1,22 @@
+body {
+	background: #f9f7f6;
+	color: #404d5b;
+	font-weight: 500;
+	font-size: 1.05em;
+	font-family: 'Raleway', Arial, sans-serif;
+}
+
+.charts_area {
+    border: 1px solid;
+    float: right;
+    height: 100%;
+    width: 69%;
+}
+
+.ping_charts {
+    height: 50%;
+}
+
+.echo_charts {
+    height: 50%;
+}
