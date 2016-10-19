@@ -59,7 +59,7 @@ class Form extends React.Component {
 
                         )}
 
-                        <li>
+                        <li className={styles.button_group}>
                             <button type="button" onClick={this.onStartClick}>Start</button>
                             <button type="button" onClick={this.onAbortClick}>Abort</button>
                         </li>
