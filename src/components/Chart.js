@@ -36,7 +36,7 @@ class Chart extends React.Component {
 
         return (
             <div className={styles.chart}>
-                <Line data={chartData} options={chartOptions} height='300' />
+                <Line data={chartData} options={chartOptions} height='330' />
                 <h2 className='chart-title'>{this.props.label}</h2>
             </div>
         )

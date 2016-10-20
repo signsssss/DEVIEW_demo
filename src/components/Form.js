@@ -5,6 +5,9 @@ import axios from 'axios';
 import { selectPing, setIp, setPort, setPacketSize, setPingChart, setEchoChart } from '../actions';
 import styles from './Form.css';
 
+const Rcslider = require('rc-slider');
+require('rc-slider/assets/index.css');
+
 class Form extends React.Component {
     constructor(props) {
         super(props);
@@ -13,60 +16,75 @@ class Form extends React.Component {
         this.onIpChange = this.onIpChange.bind(this);
         this.onPortChange = this.onPortChange.bind(this);
         this.onSizeChange = this.onSizeChange.bind(this);
+        this.onSliderChange = this.onSliderChange.bind(this);
         this.onStartClick = this.onStartClick.bind(this);
         this.onAbortClick = this.onAbortClick.bind(this);
     }
 
     render() {
-        return (
-            <div>
-                <form className={styles.form}>
-                    <ul>
-                        <li className={styles.radio_group}>
-                            <label className={styles.radio_label}><input type='radio' name='ping' value='ping' checked={this.props.inputs.ping} onChange={this.onRadioChange} /><span>Ping</span></label>
-                            <label className={styles.radio_label}><input type='radio' name='ping' value='echo' checked={!this.props.inputs.ping} onChange={this.onRadioChange} /><span>Echo</span></label>
-                        </li>
-                        <li>
-                            <span className={styles.styled_input}>
-                                <label htmlFor='ip'><span>IP</span></label>
-                                <input type='text' name='ip' value={ this.props.inputs.ip } onChange={this.onIpChange} />
-                            </span>
-                        </li>
+      const marks = {
+        0: '0',
+        4: '64',
+        10: '128',
+        18: '256',
+        32: '512',
+        64: '1024',
+        100: '1500'
+      }
 
-                        {(this.props.inputs.ping
-                            ? null
-                            : <li>
-                                <span className={styles.styled_input}>
-                                    <label htmlFor='port'><span>Port</span></label>
-                                    <input type='text' name='port' value={ this.props.inputs.port } onChange={this.onPortChange} />
-                                </span>
-                            </li>
+      return (
+          <div className={styles.form}>
+              <form>
+                  <ul>
+                      <li className={styles.radio_group}>
+                          <label className={styles.radio_label}><input type='radio' name='ping' value='ping' checked={this.props.inputs.ping} onChange={this.onRadioChange} /><span>Ping</span></label>
+                          <label className={styles.radio_label}><input type='radio' name='ping' value='echo' checked={!this.props.inputs.ping} onChange={this.onRadioChange} /><span>Echo</span></label>
+                      </li>
+                      <li>
+                          <span className={styles.styled_input}>
+                              <label htmlFor='ip'><span>IP</span></label>
+                              <input type='text' name='ip' value={ this.props.inputs.ip } onChange={this.onIpChange} />
+                          </span>
+                      </li>
 
-                        )}
+                      {(this.props.inputs.ping
+                          ? null
+                          : <li>
+                              <span className={styles.styled_input}>
+                                  <label htmlFor='port'><span>Port</span></label>
+                                  <input type='text' name='port' value={ this.props.inputs.port } onChange={this.onPortChange} />
+                              </span>
+                          </li>
 
-                        {(this.props.inputs.ping
-                            ? null
-                            : <li>
-                                <select name='size_options' onChange={this.onSizeChange}>
-                                    <option value=''>Packet Size</option>
-                                    {(this.props.inputs.size_options).map((data, index) => {
-                                        return (
-                                            <option value={data} key={index}>{data}</option>
-                                        );
-                                    })}
-                                </select>
-                            </li>
+                      )}
 
-                        )}
+                      {(this.props.inputs.ping
+                          ? null
+                          : <li>
+                              <select name='size_options' onChange={this.onSizeChange}>
+                                  <option value=''>Packet Size</option>
+                                  {(this.props.inputs.size_options).map((data, index) => {
+                                      return (
+                                          <option value={data} key={index}>{data}</option>
+                                      );
+                                  })}
+                              </select>
+                          </li>
 
-                        <li className={styles.button_group}>
-                            <button type="button" onClick={this.onStartClick}>Start</button>
-                            <button type="button" onClick={this.onAbortClick}>Abort</button>
-                        </li>
-                    </ul>
-                </form>
-            </div>
-        )
+                      )}
+
+                      <li className={styles.slider_area}>
+                        <Rcslider min={0} marks={marks} step={null} onChange={this.onSliderChange} />
+                      </li>
+
+                      <li className={styles.button_group}>
+                          <button type="button" onClick={this.onStartClick}>Start</button>
+                          <button type="button" onClick={this.onAbortClick}>Abort</button>
+                      </li>
+                  </ul>
+              </form>
+          </div>
+      )
     }
 
     onRadioChange(e) {
@@ -87,6 +105,10 @@ class Form extends React.Component {
 
     onSizeChange(e) {
         this.props.setPacketSize(e.target.value);
+    }
+
+    onSliderChange(value) {
+      console.log(value);
     }
 
     onStartClick() {

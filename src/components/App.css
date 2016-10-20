@@ -7,16 +7,19 @@ body {
 }
 
 .charts_area {
-    border: 1px solid;
     float: right;
     height: 100%;
-    width: 69%;
+    width: 60%;
+		margin-top: 2%;
 }
 
-.ping_charts {
+.throughput_charts {
     height: 50%;
+		background-color: #eee;
+		margin-bottom: 3%;
 }
 
-.echo_charts {
+.latency_charts {
     height: 50%;
+		background-color: #eee;
 }
