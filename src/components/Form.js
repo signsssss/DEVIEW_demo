@@ -22,69 +22,59 @@ class Form extends React.Component {
     }
 
     render() {
-      const marks = {
-        0: '0',
-        4: '64',
-        10: '128',
-        18: '256',
-        32: '512',
-        64: '1024',
-        100: '1500'
-      }
+        const marks = {
+            0: '0',
+            4: '64',
+            10: '128',
+            18: '256',
+            32: '512',
+            64: '1024',
+            100: '1500'
+        }
 
-      return (
-          <div className={styles.form}>
-              <form>
-                  <ul>
-                      <li className={styles.radio_group}>
-                          <label className={styles.radio_label}><input type='radio' name='ping' value='ping' checked={this.props.inputs.ping} onChange={this.onRadioChange} /><span>Ping</span></label>
-                          <label className={styles.radio_label}><input type='radio' name='ping' value='echo' checked={!this.props.inputs.ping} onChange={this.onRadioChange} /><span>Echo</span></label>
-                      </li>
-                      <li>
-                          <span className={styles.styled_input}>
-                              <label htmlFor='ip'><span>IP</span></label>
-                              <input type='text' name='ip' value={ this.props.inputs.ip } onChange={this.onIpChange} />
-                          </span>
-                      </li>
+        return (
+            <div className={styles.form}>
+                <form>
+                    <ul>
+                        <li className={styles.radio_group}>
+                            <label className={styles.radio_label}><input type='radio' name='ping' value='ping' checked={this.props.inputs.ping} onChange={this.onRadioChange} /><span>Ping</span></label>
+                            <label className={styles.radio_label}><input type='radio' name='ping' value='echo' checked={!this.props.inputs.ping} onChange={this.onRadioChange} /><span>Echo</span></label>
+                        </li>
+                        <li>
+                            <span className={styles.styled_input}>
+                                <label htmlFor='ip'><span>IP</span></label>
+                                <input type='text' name='ip' value={ this.props.inputs.ip } onChange={this.onIpChange} />
+                            </span>
+                        </li>
 
-                      {(this.props.inputs.ping
-                          ? null
-                          : <li>
-                              <span className={styles.styled_input}>
-                                  <label htmlFor='port'><span>Port</span></label>
-                                  <input type='text' name='port' value={ this.props.inputs.port } onChange={this.onPortChange} />
-                              </span>
-                          </li>
+                        {(this.props.inputs.ping
+                            ? null
+                            : <li>
+                            <span className={styles.styled_input}>
+                                <label htmlFor='port'><span>Port</span></label>
+                                <input type='text' name='port' value={ this.props.inputs.port } onChange={this.onPortChange} />
+                            </span>
+                        </li>
 
-                      )}
+                        )}
 
-                      {(this.props.inputs.ping
-                          ? null
-                          : <li>
-                              <select name='size_options' onChange={this.onSizeChange}>
-                                  <option value=''>Packet Size</option>
-                                  {(this.props.inputs.size_options).map((data, index) => {
-                                      return (
-                                          <option value={data} key={index}>{data}</option>
-                                      );
-                                  })}
-                              </select>
-                          </li>
+                        {(this.props.inputs.ping
+                            ? null
+                            : <li className={styles.slider_area}>
+                                <Rcslider min={0} marks={marks} step={null} onChange={this.onSliderChange} />
+                            </li>
+                        )}
 
-                      )}
 
-                      <li className={styles.slider_area}>
-                        <Rcslider min={0} marks={marks} step={null} onChange={this.onSliderChange} />
-                      </li>
 
-                      <li className={styles.button_group}>
-                          <button type="button" onClick={this.onStartClick}>Start</button>
-                          <button type="button" onClick={this.onAbortClick}>Abort</button>
-                      </li>
-                  </ul>
-              </form>
-          </div>
-      )
+                        <li className={styles.button_group}>
+                            <button type="button" onClick={this.onStartClick}>Start</button>
+                            <button type="button" onClick={this.onAbortClick}>Abort</button>
+                        </li>
+                    </ul>
+                </form>
+            </div>
+        )
     }
 
     onRadioChange(e) {
@@ -108,7 +98,32 @@ class Form extends React.Component {
     }
 
     onSliderChange(value) {
-      console.log(value);
+        let packet_size = 0;
+        console.log(value);
+        switch(value) {
+            case 4:
+                packet_size = 64;
+                break;
+            case 10:
+                packet_size = 128;
+                break;
+            case 18:
+                packet_size = 256;
+                break;
+            case 32:
+                packet_size = 512;
+                break;
+            case 64:
+                packet_size = 1024;
+                break;
+            case 100:
+                packet_size = 1500;
+                break;
+            default:
+                packet_size = 64;
+        }
+        console.log('packet_size:', packet_size);
+        this.props.setPacketSize(packet_size);
     }
 
     onStartClick() {
@@ -116,19 +131,18 @@ class Form extends React.Component {
         if(this.props.inputs.ping) {
             getData = () => {
                 axios.get('/1/ping').then(response => {
-                    console.log(response.data.ping_data);
                     this.props.setPingChart(response.data.ping_data);
                 })
             };
 
             axios.post('/1/ping', { ip: this.props.inputs.ip })
             .then(response => {
-                    this.chart_request = setInterval(getData, 1000);
+                this.chart_request = setInterval(getData, 1000);
             })
         } else {
             getData = () => {
                 axios.get('/1/echo').then(response => {
-                    this.props.setEchoChart(response.data.data);
+                    this.props.setEchoChart(response.data.echo_data);
                 })
             };
 

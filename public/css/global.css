@@ -3,9 +3,10 @@ body {
 	color: #404d5b;
 	font-weight: 500;
 	font-size: 1.05em;
-	font-family: 'Raleway', Arial, sans-serif;
+	font-family: "Segoe UI", "Open Sans", sans-serif, serif;
+	height: 100%;
 }
 
-.slider_area .rc-slider {
-  margin-left: 10%;
+#root {
+	text-align: center;
 }
