@@ -12,12 +12,12 @@ class Chart extends React.Component {
         defaults.global.animation = false;
         let data_labels = [];
         console.log('this.props.data.count', this.props.title, this.props.data.count);
-        if(this.props.data.count >= 20) {
-            for(let i = this.props.data.count; i < this.props.data.count + 20; i++) {
+        if(this.props.data.count >= 60) {
+            for(let i = this.props.data.count; i < this.props.data.count + 60; i++) {
                 data_labels.push(i - 19);
             }
         } else {
-            for(let i = 0; i < 20; i++) {
+            for(let i = 0; i < 60; i++) {
                 data_labels.push(i + 1);
             }
         }
@@ -49,6 +49,13 @@ class Chart extends React.Component {
             },
             legend: {
                 display: true
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
             }
         }
 

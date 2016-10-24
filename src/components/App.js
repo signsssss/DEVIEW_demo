@@ -19,6 +19,10 @@ class App extends React.Component {
     }
 
     componentDidMount() {
+        // axios.get('/1/parse').then(response => {
+        //     console.log('data parsed!');
+        // })
+
         let getThroughputData = () => {
             axios.get('/1/throughput').then(response => {
                 this.props.setThroughputChart(response.data.data);
@@ -30,16 +34,16 @@ class App extends React.Component {
             this.throughput_request = setInterval(getThroughputData, 1000);
         })
 
-        let getLatencyData = () => {
-            axios.get('/1/latency').then(response => {
-                this.props.setLatencyChart(response.data.data);
-            })
-        };
-
-        axios.post('/1/latency', { linux_config: this.props.linux_config, packetngin_config:this.props.packetngin_config })
-        .then(response => {
-            this.latency_request = setInterval(getLatencyData, 1000)
-        })
+        // let getLatencyData = () => {
+        //     axios.get('/1/latency').then(response => {
+        //         this.props.setLatencyChart(response.data.data);
+        //     })
+        // };
+        //
+        // axios.post('/1/latency', { linux_config: this.props.linux_config, packetngin_config:this.props.packetngin_config })
+        // .then(response => {
+        //     this.latency_request = setInterval(getLatencyData, 1000)
+        // })
     }
 
     componentWillUnmount() {
@@ -49,7 +53,7 @@ class App extends React.Component {
 
     render() {
         const marks = {
-            0: '0',
+            0: '',
             4: '64',
             10: '128',
             18: '256',
@@ -74,11 +78,11 @@ class App extends React.Component {
     }
 
     onSliderChange(value) {
-        let packet_size = 0;
+        let packet_size = 64;
         console.log(value);
         switch(value) {
             case 0:
-                packet_size = 0;
+                packet_size = 64;
                 break;
             case 4:
                 packet_size = 64;
@@ -99,7 +103,7 @@ class App extends React.Component {
                 packet_size = 1500;
                 break;
             default:
-                packet_size = 0;
+                packet_size = 64;
         }
         console.log('packet_size:', packet_size);
         this.props.setPacketSize(packet_size);
